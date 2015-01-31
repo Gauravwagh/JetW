@@ -1,0 +1,16 @@
+<li class="text-center selected" style=":100px; background-color:#04B173">
+                        <a href="#" id="{{ p.project_title }}" style="border:none;height: 65px; font-size:20px;" data-toggle="modal" data-target="#AddModal" >
+								+ Create Project
+						</a>
+						
+                    </li>
+					{% for p in projects %}
+                    <li class="text-center selected" style=":100px;">
+                        <a href="#" class="uni" id="{{ p.project_title }}" style="border:none;height: 100px; font-size:20px;" >
+								<i class="fa fa-dashboard fa-fw"></i>
+								<br>
+								{{ p.project_title }}
+						</a>
+						<input type="hidden" value="{{p.id}}">
+                    </li><input type="hidden" id="saveid">
+					{% endfor %}

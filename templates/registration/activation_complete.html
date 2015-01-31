@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+
+<!-- Latest Work -->
+        
+	<div class="container">
+       
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 text-center logo-margin alert alert-success" style="margin-top:30%;">
+             
+						<p class="alert alert-success">Welcome, {% trans "Your account is now activated." %}</p>
+						<p>{% trans "To Login" %}? <a href="{% url 'auth_login' %}">{% trans "Login" %}</a>!</p>
+                    </div>
+                </div>
+            </div>
+      
+
+
+{% endblock %}

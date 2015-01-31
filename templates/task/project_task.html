@@ -1,0 +1,219 @@
+			<div class="alert alert-success tcomplete" style="display:none">Task Completed</div>
+
+				<div class="no-list-hide">
+				
+				
+					
+			
+		
+		
+					<div class="row"  style=" padding:0px 0px 0px 22px;">
+					<div class="col-md-6">
+					<h5 style="color:black;font-weight:bolder;"><span style="">Task</h5></div>
+					<div class="col-md-2">
+					<h5 style="color:black;font-weight:bolder;">Assigned To</h5>
+					</div>
+					<div class="col-md-2">
+					<h5 style="color:black;font-weight:bolder;">Task Created on</h5>
+					</div>
+					
+					<div class="col-md-2">
+					<h5 style="color:black;font-weight:bolder;">Mark Complete</h5>
+					</div>
+					
+
+					</div>
+					
+				
+				</div>
+				
+				
+				<div class="accordion">
+				
+				
+					{% for t in tasks %}
+					<div class="content1">
+					<div class="row header-section" style="background-color:rgb(83, 163, 163); padding:0px 0px 0px 22px;">
+					<div class="col-md-6">
+					<h5><span style="position: absolute;left: -1.0em;top: 50%;margin-top: -8px; "></span><span style="color:white;"> {{ t.task }}</span></h5></div>
+					<div class="col-md-2">
+					<h6 style="color:white;">{{t.assigned_to|upper}}</h6>
+					</div>
+					<div class="col-md-3">
+					<h6 style="color:white;">{{t.start_date}}</h6>
+					</div>
+					<div class="col-md-1">
+					<span class="pull-right" ><input style="margin-top:12px;" type="checkbox" class="switch check" /><input type="hidden" value="{{t.id}}"</span>
+					</div>
+					</div>
+					<div>
+					<p> {{ t.task_desc }} </p>
+					<ul>
+						<li><strong>Created By : </strong>{{ t.user|upper }}</li>
+						<li ><strong>Assigned To : </strong><span class="assignee{{t.id}}" style="text-transform:uppercase">{{ t.assigned_to|upper }}</span>
+							<span class="pull-right ">
+								<select class="assign btn" style="color:white" ><option>Assign To</option>{% for user in users %}
+									<option value="{{  user.user.username }}">{{ user.user.username }}</option>
+										{% endfor %}
+								</select>
+							<input type="hidden" value="{{ t.id }}">
+					</span>
+						</li>
+					</ul>
+					<br/>
+					<div style="font-size:12px">
+						<span class="pull-left">Start Date : {{ t.start_date }}</span>
+						<span align="center" style="margin-left:10%;">End Date : {{ t.end_date }}</span>
+						<span class="pull-right">Created Date : {{ t.created }}</span>
+					</div>
+					
+					
+				
+					
+				
+				<hr><div style=" margin-left:25%; background-color: #F2F2F2">
+					<div class="display_comments{{t.id}}" style="">
+						{% for c in t.comments|dictsortreversed:"timestamp" %}
+							
+						
+						
+			<div class="feed_item">
+        
+                <div class="feed_body">
+                  <div class="row">
+                    <div class="feed_profile_pic">
+                      <img src="/media/img/retriever.jpg" alt="meta image" class="meta_image" style="width: 40px; height: 40px;" />
+                    </div>
+                    <div class="feed_text">
+                      <p style="font-size:14px;">{{ c.tcomments }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <hr class="feed_hr">
+                <div class="bottom_meta">
+                  <div class="row">
+                    
+                    <div class="col-sm-12" style="font-size:12px;">
+                      <span class="pull-left">{{c.timestamp}} </span><span class="pull-right" style="margin-right:10px;"><a href="#" style="color:blue">{{c.user.username}}</a></span> 
+                    </div> 
+                  </div>
+                </div>
+              </div>
+
+			  {% empty %}
+				<h6>No Comments Available</h6>
+				{% endfor %}		
+					</div>
+					<div class="" style="margin-left:20px; padding-bottom:10px;">
+                  
+					<form>
+                    <textarea  class="span6 comments1" style="" cols="60"></textarea>
+                    <input type="button" class="btn push_comments" value="comment" style="border-radius:0px; background-color:#48d1cc; color:white; font-weight:bold;"/><input type="hidden" class="postid" value = "{{t.id}}"
+                  </form>
+                </div>	
+				</div>
+					              </div>
+		</div>{% empty %} <div class="alert alert-danger"><h>No Task Created for this project</h5></div>
+						<script>
+							$(document).ready(function(){
+
+								$(".no-list-hide").hide();
+							});	
+
+						</script>
+					
+					{% endfor %}
+				
+				</div>
+<script>
+  $(function() {
+    $( ".accordion" ).accordion({
+      collapsible: true,
+	  heightStyle: "content",
+	  header: ".header-section"
+	 
+    }).sortable({
+    	axis: "y",
+    	items: ".content1",
+    	handle: ".header-section"
+    });
+		$('.accordion .switch').click(function(e) {
+			e.stopPropagation();
+		});
+		
+		$('.check').on('change', function() {
+
+	var task_id = $(this).next().val();
+		
+	var data = {
+		task_id: task_id		  
+    };
+    $.ajax({
+            url: "/task/complete_task/",
+            type: "POST",
+            data: data,
+            success: function(response) {
+            	$(".tcomplete").show();	
+            	var data1 = $('#saveid').val();
+				setTimeout(callme(data1), 4000);
+            },
+            error: function() {}
+        });
+	});
+		
+	$('.assign').on('change', function() {
+	var user_name = $(this).val(); // or $(this).val()
+	var task_id = $(this).next().val();
+	var data = {
+          user_name: user_name,
+		  task_id: task_id	  
+    };
+    $.ajax({
+            url: "/task/assign_to/",
+            type: "POST",
+            data: data,
+            success: function(response) {
+				$(".assignee"+task_id).html(user_name);
+            },
+            error: function() {}
+        });
+	});
+	
+	$('.push_comments').on('click', function() {
+	var task_id = $(this).next().val();
+	var comments = $(this).prev().val();
+	var newget = $('#saveid').val();
+
+	var data = {
+          comments: comments,
+		  task_id: task_id	  
+    };
+    $.ajax({
+            url: "/task/savecomments/",
+            type: "POST",
+            data: data,
+            success: function(html) {
+				callme(newget);
+            },
+            error: function() {}
+        });
+	});
+	
+  });
+  	function callme(data) {
+
+			var project_id =data;
+			$.ajax({
+					url: "/task/project_task/" + project_id,
+					type: "GET",
+					dataType: 'html',
+					success: function(html) {
+						$('.tasks').html(html);
+					},
+					error: function() {}
+				});
+		
+		
+		}
+</script>

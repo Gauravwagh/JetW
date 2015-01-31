@@ -1,0 +1,38 @@
+
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="container">
+      
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 text-center logo-margin ">{% include 'includes/messages.html' %}
+                </div>
+            <div class="col-md-4" style="right:-35px; top: -15px; ">
+                <div class="login-panel panel panel-default" style="background-color: black; color:white; border:1px solid black; ">                  
+                    <div class="panel-heading" style="background-color: black; color:white;border:1px solid black; border-bottom:2px solid gray">
+                        <h3 class="panel-title" align="center">Login</h3>
+                    </div>
+					
+                    <div class="panel-body" style="height:300px;">
+                        <form method="post" action=".">
+                            <fieldset>
+                                {% csrf_token %} 
+								  {{ form.as_p }}
+
+								  <input class="btn btn-lg btn-success btn-block" type="submit" value="{% trans 'Log in' %}" style="background-color:#48D1CC; border:1px solid #48D1CC"  />
+								  <input type="hidden" name="next" value="{{ next }}" />
+                                <!-- Change this to a button or input when using this as a form -->
+                            </fieldset>
+                        </form>
+						<p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
+						<p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+    

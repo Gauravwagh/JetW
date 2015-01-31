@@ -1,0 +1,478 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div id="wrapper" class="wrapper">
+		 <!-- navbar top -->
+
+        <!-- navbar top -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar">
+            <!-- navbar-header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <h2 style="color:white;font-family: 'Droid Serif', serif; margin-top:10px;">WorkJet</h2>
+                </a>
+            </div>
+            <!-- end navbar-header -->
+            <!-- navbar-top-links -->
+            <ul class="nav navbar-top-links navbar-right" style="margin-top:12px;">
+                <!-- main dropdown -->
+                
+
+                <li class="dropdown">
+                							
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-3x"></i>
+                    </a>{% if user.is_authenticated %}
+                                <div><strong style="color:white">{{ user.username|upper }}</strong></div>
+							{% endif %}
+                    <!-- dropdown user-->
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i>User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i>Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="/task/logout/"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
+                        </li>
+                    </ul>
+                    <!-- end dropdown-user -->
+                </li>
+                <!-- end main dropdown -->
+            </ul>
+            <!-- end navbar-top-links -->
+
+        </nav>
+        <!-- end navbar top -->
+
+        <!-- navbar side -->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <!-- sidebar-collapse -->
+            <div class="sidebar-collapse">
+                <!-- side-menu -->
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <!-- user image section-->
+                        <div class="user-section">
+                          <div class="user-text-online">
+                            <div class="user-info" >
+							
+                              
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--end user image section-->
+						<!--end user image section-->
+                    </li>
+				</ul>
+				<ul class="nav newnav" id="side-menu" style="height:800px; overflow:scroll">
+					<li class="text-center selected" style=":100px; background-color:#04B173">
+                        <a href="#" id="{{ p.project_title }}" style="border:none;height: 65px; font-size:20px;" data-toggle="modal" data-target="#AddModal" >
+								+ Create Project
+						</a>
+						
+                    </li>
+					{% for p in projects %}
+                    <li class="text-center selected" style="">
+                        <a href="#" class="uni" id="{{ p.project_title }}" style="border:none;height: 100px; font-size:20px;" >
+								<i class="fa fa-dashboard fa-fw"></i>
+								<br>
+								{{ p.project_title }}
+						</a>
+						<input type="hidden" value="{{p.id}}">
+                    </li><input type="hidden" id="saveid">
+					{% endfor %}
+                    
+                     
+                </ul>
+                <!-- end side-menu -->
+            </div>
+            <!-- end sidebar-collapse -->
+        </nav>
+        <!-- end navbar side -->
+        <!--  page-wrapper -->
+        <div id="page-wrapper" style="overflow:scroll; height:800px; padding-bottom:50px;">
+
+            <div class="row">
+                <!-- Page Header -->
+                <div class="col-lg-7">
+                    <h1 class="page-header pname">Dashboard</h1>
+                </div>
+				
+				
+				
+				
+				<div class="col-lg-3">
+                    <ul class="nav nav-tabs dash" style="margin-top:48px;">
+  <li role="presentation" class="active task1" ><a href="#" style="padding:10px; cursor:pointer;">Task</a></li>
+  <li role="presentation" class="goals" ><a href="#" style="padding:10px; cursor:pointer;">Goals</a></li>
+</ul>  
+                </div>
+				
+				<div class="col-lg-2 addtasks">
+                    <h1 class="page-header"><input type="button" class="btn " data-toggle="modal" data-target="#myModal" value="+" style="border-radius:0px;background-color: #48d1cc; color: white; font-weight:bold; "/>
+	
+
+					<span style="font-size:18px"> Add Task</span></h1>
+                </div>
+                <!--End Page Header -->
+  </div>
+    
+
+            <div class="tasks">
+				
+			</div><input type="hidden" id="project_name" />
+
+			
+			
+			<div class="dashboard">
+			
+			
+			
+			
+			</div>
+			
+			
+			
+			
+         
+
+
+        </div>
+        <!-- end page-wrapper -->
+
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Project</h4>
+      </div>
+      <div class="modal-body">
+		<form id="ProjectForm">
+		  <div class="form-group">
+			<label for="exampleInputEmail1">Project Title</label>
+			<input type="text" class="form-control p_title" id="exampleInputEmail1" placeholder="Enter Project Title" name="p_title">
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputEmail1">Project Description</label>
+			<input type="text"  class="form-control p_desc" id="exampleInputEmail1" placeholder="Describe Project" name="p_desc">
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputEmail1">Project Duration</label>
+			<input type="text" class="form-control p_dura" id="exampleInputEmail1" placeholder="Please provide in terms of weeks like: 5 or 7" name="p_dura">
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputPassword1">Start Date</label>
+			<input type="datetime-local" class="form-control p_sdate" id="exampleInputPassword1" placeholder="Start date" name="p_sdate">
+		  </div>
+		   <div class="form-group">
+			<label for="exampleInputPassword1">End Date</label>
+			<input type="datetime-local"  class="form-control p_edate" id="exampleInputPassword1" placeholder="End Date" name="p_edate">
+		  </div>
+<div class="modal-footer">
+      
+        <button type="button" class="btn  add_project_new">Create</button>
+        <button type="button" class="btn " data-dismiss="modal">Close</button>
+        
+      </div>
+		</form>
+      </div>
+      
+    </div>
+  </div>
+</div>		
+		
+
+
+
+		
+		
+		<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Task</h4>
+      </div>
+      <div class="modal-body">
+		<form id="TaskForm">
+		  <div class="form-group">
+			<label for="exampleInputEmail1">Task Title</label>
+			<input type="text" class="form-control task" id="exampleInputEmail1" placeholder="Enter Task" name="t_task">
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputEmail1">Task Description</label>
+			<input type="text" class="form-control task_desc" id="exampleInputEmail1" placeholder="Description" name="t_desc">
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputPassword1">Start Date</label>
+			<input type="datetime-local" class="form-control sdate" id="exampleInputPassword1" placeholder="Start date" name="t_sdate">
+		  </div>
+		   <div class="form-group">
+			<label for="exampleInputPassword1">End Date</label>
+			<input type="datetime-local" class="form-control edate" id="exampleInputPassword1" placeholder="End Date" name="t_edate">
+		  </div>
+		  <div class="form-group">
+		  <label for="exampleInputPassword1">Assigned To</label>
+		  <select class="assign assignee btn" name="t_assign">
+				<option value="">Assign To</option>
+				{% for user in users %}
+					<option value="{{  user.user.username }}">{{ user.user.username }}</option>
+				 {% endfor %}
+		  </select>
+		  </div>
+ <div class="modal-footer">
+      
+              <input type="button" class="btn  save_task_new" value="Create">
+        <button type="button" class="btn " data-dismiss="modal">Close</button>
+
+      </div>
+		</form>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+    </div>
+	</div>
+	
+	{% endblock %}
+	
+	{% block js %}
+	<script>
+		$(document).ready(function() { 
+				var ulheight = $(".newnav").height();
+				newulheight = ulheight + 107;
+				$("#page-wrapper").css("height", newulheight+'px');
+				$(".addtasks").hide();
+				$(".dash").hide();
+
+				//$('.sdate').datetimepicker({theme:'dark'});
+			    //$('.edate').datetimepicker({theme:'dark'});
+			  
+				dashboard();
+				
+		
+
+		   $(document).on('click', '.uni', function() {
+			   $(".addtasks").show();
+			  $(".dash").show();
+		   $(".task1").addClass('active');
+		   $(".goals").removeClass('active');
+		   var get_title = $(this).attr('id');
+
+			$(".pname").html(get_title);
+			var project_id = Number($(this).next().val());
+			$('#saveid').val(project_id);
+			//alert($('#saveid').val());
+			$.ajax({
+					url: "/task/project_task/" + project_id,
+					type: "GET",
+					dataType: 'html',
+					success: function(html) {
+						$('.tasks').html(html);
+						$('.dashboard').html("");
+					},
+					error: function() {}
+				});
+    });
+		
+		$(document).on('click', '.goals', function() {
+			$(".addtasks").show();
+			$(".dash").show();
+			$(".task1").removeClass('active');
+			$(".goals").addClass('active');
+			$('.tasks').html('');
+			var data = $('#saveid').val();
+			get_goals(data)
+			});
+		
+		$(document).on('click', '.task1', function() {
+			$(".goals").removeClass('active');
+			$(".task1").addClass('active');
+			var data = $('#saveid').val();
+			callme(data);
+			});
+		
+		$('.save_task_new').on('click', function() {
+							var data1 = $('#saveid').val();
+							var task = $(".task").val();
+							var sdate = $(".sdate").val();
+							var edate = $('.edate').val();
+							var assigne = $('.assignee').val();
+							var task_desc = $(".task_desc").val();
+							
+
+							var data = {
+									data1: data1,
+									task: task,
+									sdate: sdate,
+									edate: edate,
+									assigne: assigne,
+									task_desc: task_desc
+							};
+							$.ajax({
+									url: "/task/savetask/",
+									type: "POST",
+									data: data,
+									success: function(response) {
+										
+									$('#myModal').modal('hide');
+									//	alert("Calling callme");
+									callme(data1);
+									
+									},
+									error: function() {}
+								});
+							});
+		
+		/* Project Adding Validation js */
+		$('#ProjectForm').formValidation({
+        framework: 'bootstrap',
+       
+        fields: {
+            p_title: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Title'
+                    }
+                }
+            },
+            p_desc: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Description'
+                    }
+                }
+            },
+            p_sdate: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Start Date'
+                    }
+                }
+            },
+            p_edate: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the End Date'
+                    }
+                }
+            },
+            p_dura: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Duration'
+                    }
+                }
+            }
+        }
+    });
+    
+    
+    /* Reset Form */
+    $('#AddModal').on('shown.bs.modal', function() {
+    $('#ProjectForm').formValidation('resetForm', true);
+});
+    
+		
+		/* Project Adding Validation js */
+		$('#TaskForm').formValidation({
+        framework: 'bootstrap',
+       
+        fields: {
+            t_task: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Task Name'
+                    }
+                }
+            },
+            t_desc: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Description'
+                    }
+                }
+            },
+            t_sdate: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the Start Date'
+                    }
+                }
+            },
+            t_edate: {
+                validators: {
+                    notEmpty: {
+                        message: 'Fill the End Date'
+                    }
+                }
+            },
+            t_assign: {
+                validators: {
+                    notEmpty: {
+                        message: 'Assign Person to the Task'
+                    }
+                }
+            }
+        }
+    });
+		    /* Reset Form */
+    $('#myModal').on('shown.bs.modal', function() {
+    $('#TaskForm').formValidation('resetForm', true);});
+		
+});
+		
+		$('.add_project_new').on('click', function() {
+							var title = $(".p_title").val();
+							var desc = $(".p_desc").val();
+							var sdate = $('.p_sdate').val();
+							var edate = $('.p_edate').val();
+							var duration = $(".p_dura").val();
+					
+
+							var data = {
+									title: title,
+									desc: desc,
+									sdate: sdate,
+									edate: edate,
+									duration: duration
+							};
+							$.ajax({
+									url: "/task/addproject/",
+									type: "POST",
+									data: data,
+									success: function(html) { 
+									if (html == "True") {
+				
+									$('#AddModal').modal('hide');
+										home();
+									 }
+									},
+									error: function() {}
+								});
+							});
+		
+		
+		
+		
+		
+		
+		
+			
+		
+		
+	</script>
+	
+	{% endblock %}

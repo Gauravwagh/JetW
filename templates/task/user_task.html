@@ -1,0 +1,157 @@
+								
+<div class="alert alert-success tcomplete" style="display:none">Task Completed</div>
+
+								<div class="no-list-hide">
+				
+				
+					
+			
+		
+		
+					<div class="row"  style=" padding:0px 0px 0px 22px;">
+					<div class="col-md-6">
+					<h5 style="color:black;font-weight:bolder;"><span style="">Task</h5></div>
+					<div class="col-md-2">
+					<h5 style="color:black;font-weight:bolder;">Assigned To</h5>
+					</div>
+					<div class="col-md-2">
+					<h5 style="color:black;font-weight:bolder;">Task Created on</h5>
+					</div>
+					<div class="col-md-2">
+					<h5 style="color:black;font-weight:bolder;">Mark Complete</h5>
+					</div>
+					</div>
+					
+				
+				</div>
+				<div class="accordion">
+				
+				
+					{% for t in tasks %}
+					
+					<div class="content">
+		
+		
+					<div class="row header-section"  style="background-color:rgb(83, 163, 163); padding:0px 0px 0px 22px;">
+					<div class="col-md-6">
+					<h5 style="color:white;"><span style="position: absolute;left: -1.0em;top: 50%;margin-top: -8px;"></span>{{ t.task }}</h5></div>
+					<div class="col-md-2">
+					<h6 style="color:white;">{{t.assigned_to|upper}}</h6>
+					</div>
+					<div class="col-md-3">
+					<h6 style="color:white;">{{t.start_date}}</h6>
+					</div>
+					<div class="col-md-1">
+					<span class=""  ><input style="margin-top:12px;" type="checkbox" class="switch check" /><input type="hidden" value="{{ t.id }}"></span>
+					</div>
+					</div>
+					<div>
+					<p> {{ t.task_desc }} </p>
+					<ul>
+						<li><strong>Created By : </strong>{{ t.user|upper }}</li>
+						<li ><strong>Assigned To : </strong><span class="assignee{{t.id}}">{{ t.assigned_to|upper }}</span>
+							<span class="pull-right ">
+								<select class="assign btn" style="color:white" ><option>Assign To</option>{% for user in users %}
+									<option value="{{  user.user.username }}">{{ user.user.username }}</option>
+										{% endfor %}
+								</select>
+							<input type="hidden" value="{{ t.id }}">
+					</span>
+						</li>
+					</ul>
+					<br/>
+					<div style="font-size:12px">
+						<span class="pull-left">Start Date : {{ t.start_date }}</span>
+						<span align="center" style="margin-left:10%;">End Date : {{ t.end_date }}</span>
+						<span class="pull-right">Created Date : {{ t.created }}</span>
+					</div>
+					</div>
+					</div>
+					{% empty %}
+						<h5 style="color:red">No Task Found</h5>
+						<script>
+							$(document).ready(function(){
+
+								$(".no-list-hide").hide();
+							});	
+
+						</script>
+					{% endfor %}
+				
+				</div>
+<script>
+
+  $(function() {
+    $( ".accordion" ).accordion({
+      collapsible: true,
+	  heightStyle: "content",
+	  active: false,
+	  header: ".header-section"
+	  
+    }).sortable({
+    	axis: "y",
+    	items: ".content",
+    	handle: ".header-section"
+    	
+    });
+	$('.accordion .switch').click(function(e) {
+    e.stopPropagation();
+});
+
+
+	$('.check').on('change', function() {
+
+	var task_id = $(this).next().val();
+	var data = {
+		task_id: task_id		  
+    };
+    $.ajax({
+            url: "/task/complete_task/",
+            type: "POST",
+            data: data,
+            success: function(response) {
+            	$(".tcomplete").show();	
+            	setTimeout(dashboard, 2000);
+				//dashboard();
+            },
+            error: function() {}
+        });
+	});
+
+
+	$('.assign').on('change', function() {
+	var user_name = $(this).val(); // or $(this).val()
+	var task_id = $(this).next().val();
+	var data = {
+          user_name: user_name,
+		  task_id: task_id
+		  
+    };
+    $.ajax({
+            url: "/task/assign_to/",
+            type: "POST",
+            data: data,
+            success: function(response) {
+				$(".assignee"+task_id).html(user_name);
+            },
+            error: function() {}
+        });
+	});
+	
+	
+  });
+  function dashboard() {
+			$.ajax({
+					url: "/task/user_task/",
+					type: "GET",
+					dataType: 'html',
+					success: function(html) {
+						$('.dashboard').html(html)
+						
+					},
+					error: function() {}
+				});
+		
+		
+		}
+</script>

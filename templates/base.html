@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkJet</title>
+	<link rel="icon" href="/media/img/wj.jpg" />
+    <!-- Core CSS - Include with every page -->
+    <link href="/media/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/media/plugins/pace/pace-theme-big-counter.css" rel="stylesheet" />
+    <link href="/media/css/style.css" rel="stylesheet" />
+	 <link href="/media/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
+	 <link href="/media/css/main-style.css" rel="stylesheet" />
+	 <link href="/media/css/jquery-ui.css" rel="stylesheet" />
+	 <link href="/media/css/corgi.css" rel="stylesheet" />
+	 <link href="/media/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+	 <link href="/media/css/formValidation.min.css" rel="stylesheet" />
+     <link href="/media/css/jquery.datetimepicker.css" rel="stylesheet" />
+
+    <!-- Page-Level CSS -->
+    <link href="/media/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+	   
+	<style>
+	@import url(http://fonts.googleapis.com/css?family=Droid+Serif:400italic);
+	.btn {
+		background-color: #48d1cc;
+		border-radius: 0px;
+		color: white;
+	}
+	
+	.btn2 {
+  display: inline-block;
+  padding: 6px 6px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 7px;
+}
+	
+	</style>
+   </head>
+<body class="body-Login-back" background="/media/img/workjet1.jpg" style="background-repeat: no-repeat;background-size: cover;-webkit-background-size: cover; overflow:hidden">
+    <!--  wrapper -->
+    {% block content %} {% endblock %}
+	
+	
+
+    <!-- end wrapper -->
+
+    <!-- Core Scripts - Include with every page -->
+	<script src="/media/js/jquery-1.10.2.js"></script> 
+	<script src="/media/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="/media/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/media/plugins/pace/pace.js"></script>
+    <script src="/media/js/siminta.js"></script>
+    <script src="/media/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="/media/plugins/morris/morris.js"></script>
+	<script src="/media/js/jquery-ui.js"></script>
+  <script id="script-resource-19" src="/media/js/corgi.js"></script>
+<script src="/media/js/formValidation.min.js"></script>
+<script src="/media/js/bootstrap.min.js"></script>
+<script src="/media/js/jquery.datetimepicker.js"></script>
+
+
+	
+	<script>
+$(document).ready(function() {
+	$("#id_username").addClass("form-control");
+	$("#id_email").addClass("form-control");
+	$("#id_password1").addClass("form-control");
+	$("#id_password2").addClass("form-control");
+	$("#id_password").addClass("form-control");
+});
+function dashboard() {
+      
+      $.ajax({
+          url: "/task/user_task/",
+          type: "GET",
+          dataType: 'html',
+          success: function(html) {
+            $('.dashboard').html(html);  
+          },
+          error: function() {}
+        });
+    
+    
+    }
+
+    
+  function get_goals(data) {
+      var project_id = data;
+      $.ajax({
+          url: "/task/get_goals/" + project_id,
+          type: "GET",
+          dataType: 'html',
+          success: function(html) {
+            $(".tasks").html(html);
+            
+            },
+          error: function() {}
+        });
+
+    }
+
+
+    function callme(data1) {
+      
+      $(".addtasks").show();
+      $(".dash").show();
+
+      var project_id =data1;
+      alert(data1);
+      $.ajax({
+          url: "/task/project_task/" + project_id,
+          type: "GET",
+          dataType: 'html',
+          success: function(html) {
+            $('.tasks').html(html)
+            $('.pname').html("");
+          },
+          error: function() {}
+        });
+    
+    
+    }
+
+    
+    function home() {
+    $.ajax({
+          url: "/task/getproject/", 
+          type: "GET",
+          dataType: 'html',
+          success: function(html) {
+            $(".newnav").html(html);  
+            var ulheight = $(".newnav").height();
+            newulheight = ulheight + 107;
+            $("#page-wrapper").css("height", newulheight+"px");
+          },
+          
+          error: function() {}
+        });
+    }
+</script>
+{% block js %} {% endblock %}
+
+
+</body>
+
+</html>
